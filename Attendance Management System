@@ -1,0 +1,152 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class attendance {
+    public static void main(String[] args) {
+        Scanner ob=new Scanner(System.in);
+        while(true){
+            System.out.println("Enter your choice");
+            System.out.println("1.Student");
+            System.out.println("2.Teacher");
+            System.out.println("3.Admin");
+            int n=ob.nextInt();
+            switch (n){
+                case 1:{
+                    System.out.println("Enter your name");
+                    String name=ob.next();
+                    int studUsn=(int)Math.floor(Math.random()*100);
+                    Student objstud=new Student(name,studUsn);
+                    break;
+                }
+                case 2:{
+                    System.out.println("Enter your name");
+                    String Tname=ob.next();
+                    int teachId=(int)Math.floor(Math.random()*100);
+                    Teacher objteach=new Teacher(Tname,teachId);
+                    break;
+                }
+                case 3:{
+                    System.out.println("Enter the admin Username");
+                    String username=ob.next();
+                    System.out.println("Enter the admin password");
+                    String password=ob.next();
+                    Admin objAdmin=new Admin();
+                    if(username.equals(objAdmin.getAdminUsername()) && password.equals(objAdmin.getAdminPassword())){
+                        System.out.println("Welcome Admin");
+                        objAdmin.checking();
+                    }
+                    else {
+                        System.out.println("Invalid username or password");
+                        System.exit(0);
+                    }
+                    break;
+                }
+            }
+        }
+    }
+}
+class Student{
+    private  String name;
+    private  int usn;
+    private static Map<String,Integer> studlist=new HashMap<>();
+   private static int  count=0;
+    Student(String name,int usn){
+        this.name = name;
+        this.usn = usn;
+        addstudent(this.name,this.usn);
+    }
+
+public void addstudent(String n,int u){
+        studlist.put(n,u);
+        count++;
+}
+
+    public static Map<String, Integer> getStudlist() {
+        return studlist;
+    }
+}
+class Teacher{
+    private  String teacherName;
+    private  int teachId;
+    private static Map<String,Integer> teachlist=new HashMap<>();
+
+    private static int  countTeach=0;
+    Teacher(String teacherName,int teachId){
+        this.teacherName = teacherName;
+        this.teachId = teachId;
+        addstudent(this.teacherName,this.teachId);
+    }
+    public void addstudent(String n,int u){
+        teachlist.put(n,u);
+        countTeach++;
+    }
+
+    public static Map<String, Integer> getTeachlist() {
+        return teachlist;
+    }
+}
+class Admin{
+  private   String adminUsername;
+  private  String adminPassword;
+  Admin(){
+      this.adminPassword = "I@dmin";
+      this.adminUsername = "Attendance";
+  }
+    public String getAdminPassword() {
+        return adminPassword;
+    }
+    public String getAdminUsername() {
+        return adminUsername;
+    }
+    public void checking(){
+       Scanner obj=new Scanner(System.in);
+       while(true){
+           System.out.println("1.Check Student");
+           System.out.println("2.Check teacher");
+           System.out.println("Enter your choice");
+           int ch=obj.nextInt();
+    switch(ch)
+    {    case 1:{
+        String checkStudent=obj.next();
+        CheckStudent objCheckstud=new CheckStudent(checkStudent);
+    break;
+    }
+        case 2:{
+            String checkTeach=obj.next();
+            CheckTeacher objCheck=new CheckTeacher(checkTeach);
+            break;
+        }
+    }
+       }
+    }
+     }
+class CheckTeacher {
+//    String checkTeach;
+    CheckTeacher(String teach) {
+//        super(teacherName, teachId);
+//        this.checkTeach=teach;
+        if (Teacher.getTeachlist().containsKey(teach)) {
+            System.out.println("Teacher Present: " + teach);
+        } else {
+            System.out.println("Teacher not Present: " + teach);
+        }
+        show();
+    }
+    public void show(){
+        System.out.println(Teacher.getTeachlist());
+    }
+}
+class CheckStudent{
+    CheckStudent(String stud) {
+        if (Student.getStudlist().containsKey(stud)) {
+            System.out.println("Student Present: " + stud);
+        } else {
+            System.out.println("Student not Present: " + stud);
+        }
+        show();
+    }
+    public void show(){
+        System.out.println(Student.getStudlist());
+    }
+}
