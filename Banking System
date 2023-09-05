@@ -1,0 +1,175 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Banking {
+    public static void main(String[] args) {
+        Scanner obj=new Scanner(System.in);
+        while(true){
+            System.out.println("1.Register your Identity");
+            System.out.println("2.Login with your credentials!!");
+            System.out.println("Enter your choice");
+            int n= obj.nextInt();
+            int count=0;
+            switch(n){
+                case 1:{
+                    System.out.println("Enter your name");
+                    String name= obj.next();
+                    int userId=(int)Math.floor(Math.random()*100);
+                    while(UserLogin.getUser().containsKey(userId)){
+                        userId=(int)Math.floor(Math.random()*1000);
+                    }
+                    System.out.println("This is your id:"+userId);
+                    UserLogin user=new UserLogin(name,userId);
+                    System.out.println("Please remember your user ID!!");
+                    System.out.println("Deposit an initial amount");
+                    int bal=obj.nextInt();
+                    if(bal>0 && bal<1000){
+                        Amount objAmount=new Amount(userId,bal);
+                    }
+                    else{
+                        System.out.println("Please eneter an amount within 1000");
+                        System.exit(0);
+                    }
+                    System.out.println("You have successfully registered!!!");
+                    break;
+                }
+                case 2:{
+                    System.out.println("Enter your user id");
+                    int uid= obj.nextInt();
+                    if(UserLogin.getUser().containsKey(uid)){
+                        System.out.println("Welcome"+UserLogin.getUser().get(uid));
+                       count=1;
+                    }
+                    else
+                        System.out.println("Sorry it doesn't match");
+                    if(count==1) {
+                            System.out.println("1.Deposit");
+                            System.out.println("2.Withdraw");
+                            System.out.println("3.Balance Enquiry");
+                            System.out.println("4.Transfer Amount");
+                            System.out.println("Enter your choice");
+                            int ch=obj.nextInt();
+                            switch(ch){
+                                case 1:{
+                                    System.out.println("Enter the amount to deposit");
+                                    int userAmount=obj.nextInt();
+                                    Amount.depo(userAmount);
+                                    break;
+                                }
+                                case 2:{
+                                    System.out.println("Enter the amount to withdraw");
+                                    int userAmount= obj.nextInt();
+                                    Amount.withdraw(userAmount);
+                                    break;
+                                }
+                                case 3:{
+                                    System.out.println("Balance receipt");
+                                    Amount.balanceEnq(uid);
+                                    break;
+                                }
+                                case 4:{
+                                    System.out.println("Enter the id to send the amount");
+                                    int id= obj.nextInt();
+                                    if(UserLogin.getUser().containsKey(id)){
+                                        System.out.println("The receiver name is "+UserLogin.getUser().get(id));
+                                        System.out.println("Enter the amount to be transferred");
+                                        int rupee=obj.nextInt();
+                                        Amount.transferAmount(id,rupee,uid);
+                                    }
+                                    else {
+                                        System.out.println("The receiver doesn't exist!!");
+                                    }
+                                }
+                                default:break;
+                            }
+                        }
+                    break;
+                   }
+                }
+            }
+        }
+    }
+class UserLogin{
+    private static String name;
+    private static int userId;
+    private static Map<Integer,String> user=new HashMap<>();
+    UserLogin(String n,int u){
+        this.name=n;
+        this.userId=u;
+        setUser(this.userId,this.name);
+    }
+    public static Map<Integer, String> getUser() {
+        return user;
+    }
+    public void setUser(int id, String name){
+        user.put(id,name);
+        System.out.println(user);
+    }
+}
+class Amount{
+    private static int balance;
+    private static int uid;
+    private static Map<Integer,Integer> usBal=new HashMap<>();
+    Amount(int u,int b){
+        this.uid=u;
+        this.balance=b;
+        setUsBal(this.uid,this.balance);
+    }
+    public static void depo(int b){
+        balance+=b;
+        System.out.println("Total balance"+balance);
+//        Amount.getUsBal();
+    }
+    public void setUsBal(int n,int u){
+        usBal.put(n,u);
+        System.out.println(usBal);
+    }
+    public static void withdraw(int b){
+        if(b>balance){
+            System.out.println("You can't withdraw!!!");
+            System.out.println("Try with any other amount");
+            System.exit(0);
+//            Amount.getUsBal();
+        }
+        else {
+            balance-=b;
+            System.out.println("The total balance is "+balance);
+        }
+    }
+        public static  void balanceEnq(int n){
+        if(UserLogin.getUser().containsKey(n)){
+            System.out.println("YOUR RECEIPT IS BEEN GENERATED");
+            System.out.println("The balance is"+getBalance());
+            System.out.println("The name of the user"+UserLogin.getUser().get(n));
+//            System.out.println(getUsBal());
+//            Amount.getUsBal();
+        }
+        else
+            System.out.println("Not found");
+       }
+    public static int getBalance() {
+        return balance;
+    }
+    public static void transferAmount(int u,int i,int tn){
+           int balance1=getUsBal().get(tn);
+           if(balance1<=i){
+               System.out.println("Can't transfer!!");
+               System.exit(0);
+           }
+           balance1-=i;
+        System.out.println("The amount of rupees "+i+"is been debited");
+        System.out.println("The total balance is "+balance1);
+//          balance=getUsBal().get(u);
+//        System.out.println("Before Transfer "+balance);
+          balance+=i;
+//        System.out.println("After transfer "+balance);
+          Amount.getUsBal().replace(u,balance);
+        System.out.println("Amount transferred succesfully");
+//        Amount.getUsBal();
+    }
+    public static Map<Integer, Integer> getUsBal() {
+//        System.out.println(usBal);
+        return usBal;
+    }
+}
