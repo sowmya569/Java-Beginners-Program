@@ -1,0 +1,58 @@
+import java.util.*;
+class Todo{
+    String name;
+    Map<String, List<String>>  todo;
+    public  Todo(String name){
+         this.name=name;
+         this.todo=new HashMap<>();
+     }
+     public void addTodo(String n,List<String> task){
+              todo.put(n,task);
+     }
+    public void displayTodo(String n){
+        if(todo.containsKey(n)){
+            System.out.println(todo.get(n));
+        }
+     }
+}
+
+public class Task {
+    public static void main(String[] args) {
+        Scanner ob=new Scanner(System.in);
+       ArrayList<String> task;
+        Todo objTodo=null;
+        while(true){
+            System.out.println("1.Create a list");
+            System.out.println("2.Display my List");
+            System.out.println("Enter your choice");
+            int ch=ob.nextInt();
+            switch (ch){
+                case 1:{
+                    System.out.println("Enter your name!");
+                    String name=ob.next();
+                   objTodo= new Todo(name);
+                 System.out.println("Enter the number of tasks to be completed");
+                  int n=ob.nextInt();
+                  ArrayList<String> tasklist=new ArrayList<>();
+                    System.out.println("Enter your tasks");
+                   for(int i=0;i<n;i++){
+                  String list=ob.next();
+                  tasklist.add(list);
+                  }
+                   objTodo.addTodo(name,tasklist);
+                   }
+                break;
+                case 2:{
+                    if (objTodo != null) {
+                        ob.nextLine();
+                        System.out.print("Enter your name to see the tasks: ");
+                        String na = ob.nextLine();
+                        objTodo.displayTodo(na);
+                    } else {
+                        System.out.println("No tasks created yet.");
+                    }
+                }
+            }
+        }
+    }
+}
